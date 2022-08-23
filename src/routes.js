@@ -1,4 +1,4 @@
-const { addBookHandler } = require('./handler');
+const { addBookHandler, getAllBooksHandler } = require('./handler');
 
 const routes = [
   // Route digunakan untuk menambahkan buku
@@ -6,6 +6,12 @@ const routes = [
     method: 'POST',
     path: '/books',
     handler: addBookHandler,
+  },
+  // Route digunakan untuk mendapatkan semua buku
+  {
+    method: 'GET',
+    path: '/books',
+    handler: getAllBooksHandler,
   },
 ];
 

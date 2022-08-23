@@ -90,7 +90,20 @@ const addBookHandler = (request, h) => {
   return response;
 };
 
+// Handler untuk mendapatkan notes
+const getAllBooksHandler = () => ({
+  status: 'success',
+  data: {
+    books: books.map((book) => ({
+      id: book.id,
+      name: book.name,
+      publisher: book.publisher,
+    })),
+  },
+});
+
 // Melakukan export handler
 module.exports = {
   addBookHandler,
+  getAllBooksHandler,
 };
