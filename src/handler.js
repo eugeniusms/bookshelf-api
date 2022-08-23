@@ -128,9 +128,86 @@ const getBookByIdHandler = (request, h) => {
   return response;
 };
 
+// Handler untuk mengubah single book berdasarkan id
+const editBookByIdHandler = (request, h) => {
+  const { id } = request.params; // Mengambil id address
+
+  const {
+    name,
+    year,
+    author,
+    summary,
+    publisher,
+    pageCount,
+    readPage,
+    reading,
+  } = request.payload; // Meminta data terbaru yang dikirimkan client
+  const updatedAt = new Date().toISOString(); // Update tanggal otomatis saat ini
+
+  // Lakukan pencarian book berdasarkan id
+  const index = books.findIndex((book) => book.id === id);
+
+  // RESPONSE : User tidak menambahkan nama buku
+  if (name === undefined) {
+    const response = h
+      .response({
+        status: 'fail',
+        message: 'Gagal memperbarui buku. Mohon isi nama buku',
+      })
+      .code(400);
+    return response;
+  }
+
+  // RESPONSE : User memasukkan banyak readPage > pageCount
+  if (readPage > pageCount) {
+    const response = h
+      .response({
+        status: 'fail',
+        message:
+          'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount',
+      })
+      .code(400);
+    return response;
+  }
+
+  // Jika index !== -1 (artinya ditemukan maka )
+  if (index !== -1) {
+    books[index] = {
+    // Spread operator digunakan untuk mempertahankan data yang tidak perlu diubah
+      ...books[index],
+      name,
+      year,
+      author,
+      summary,
+      publisher,
+      pageCount,
+      readPage,
+      reading,
+      updatedAt,
+    };
+
+    // Kembalikan response success
+    const response = h.response({
+      status: 'success',
+      message: 'Buku berhasil diperbarui',
+    });
+    response.code(200);
+    return response;
+  }
+
+  // Jika id tidak ditemukan maka response fail
+  const response = h.response({
+    status: 'fail',
+    message: 'Gagal memperbarui buku. Id tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
+
 // Melakukan export handler
 module.exports = {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdHandler,
+  editBookByIdHandler,
 };
