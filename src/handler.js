@@ -93,6 +93,7 @@ const addBookHandler = (request, h) => {
 
 // Handler untuk mendapatkan books
 const getAllBooksHandler = (request, h) => {
+  console.log(request.query);
   const { name, reading, finished } = request.query;
 
   // Jika tidak terdapat query di dalam address
@@ -135,9 +136,17 @@ const getAllBooksHandler = (request, h) => {
   }
 
   // Jika terdapat query reading di dalam address
+  // Variabel readingBoolean digunakan untuk menyimpan type boolean sesuai query
   if (reading) {
+    let readingBoolean;
+    if (reading === 'true') {
+      readingBoolean = true;
+    }
+    if (reading === 'false') {
+      readingBoolean = false;
+    }
     const filteredReading = books.filter(
-      (book) => Number(book.reading) === Number(reading),
+      (book) => (book.reading === readingBoolean),
     );
 
     const response = h
@@ -156,8 +165,16 @@ const getAllBooksHandler = (request, h) => {
   }
 
   // Jika terdapat query finished di dalam address
+  // Variabel finishedBoolean digunakan untuk menyimpan type boolean sesuai query
+  let finishedBoolean;
+  if (finished === 'true') {
+    finishedBoolean = true;
+  }
+  if (finished === 'false') {
+    finishedBoolean = false;
+  }
   const filteredFinished = books.filter(
-    (book) => Number(book.finished) === Number(finished),
+    (book) => (book.finished === finishedBoolean),
   );
 
   const response = h
