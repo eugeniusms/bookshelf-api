@@ -46,7 +46,7 @@ const addBookHandler = (request, h) => {
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
 
-  // Membuat object newNote yang telah disusun isinya
+  // Membuat object newBook yang telah disusun isinya
   const newBook = {
     id,
     name,
@@ -204,10 +204,39 @@ const editBookByIdHandler = (request, h) => {
   return response;
 };
 
+// Handler untuk menghapus suatu buku berdasarkan id
+const deleteBookByIdHandler = (request, h) => {
+  const { id } = request.params; // Mendapatkan id address
+
+  // Mencari book dengan id tertentu
+  const index = books.findIndex((book) => book.id === id);
+
+  // Jika index !== -1 artinya terdapat book yang sesuai maka response success
+  if (index !== -1) {
+    // splice digunakan untuk menghapus elemen array
+    books.splice(index, 1);
+    const response = h.response({
+      status: 'success',
+      message: 'Buku berhasil dihapus',
+    });
+    response.code(200);
+    return response;
+  }
+
+  // Jika tidak ditemukan maka response fail
+  const response = h.response({
+    status: 'fail',
+    message: 'Buku gagal dihapus. Id tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
+
 // Melakukan export handler
 module.exports = {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdHandler,
   editBookByIdHandler,
+  deleteBookByIdHandler,
 };
