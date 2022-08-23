@@ -1,5 +1,6 @@
 # Bookshelf API
 https://github.com/eugeniusms/bookshelf-api
+<br/>
 ![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png) `hapi` ![node.js](https://via.placeholder.com/15/c5f015/c5f015.png) `nodejs`
 
 Bookshelf API is a storage service and book data management tool.
