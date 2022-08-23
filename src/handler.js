@@ -92,16 +92,88 @@ const addBookHandler = (request, h) => {
 };
 
 // Handler untuk mendapatkan books
-const getAllBooksHandler = () => ({
-  status: 'success',
-  data: {
-    books: books.map((book) => ({
-      id: book.id,
-      name: book.name,
-      publisher: book.publisher,
-    })),
-  },
-});
+const getAllBooksHandler = (request, h) => {
+  const { name, reading, finished } = request.query;
+
+  // Jika tidak terdapat query di dalam address
+  if (!name && !reading && !finished) {
+    const response = h
+      .response({
+        status: 'success',
+        data: {
+          books: books.map((book) => ({
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          })),
+        },
+      })
+      .code(200);
+    return response;
+  }
+
+  // Jika terdapat query name di dalam address
+  if (name) {
+    const filteredName = books.filter((book) => {
+      const nameRegex = new RegExp(name, 'gi');
+      return nameRegex.test(book.name);
+    });
+
+    const response = h
+      .response({
+        status: 'success',
+        data: {
+          books: filteredName.map((book) => ({
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          })),
+        },
+      })
+      .code(200);
+    return response;
+  }
+
+  // Jika terdapat query reading di dalam address
+  if (reading) {
+    const filteredReading = books.filter(
+      (book) => Number(book.reading) === Number(reading),
+    );
+
+    const response = h
+      .response({
+        status: 'success',
+        data: {
+          books: filteredReading.map((book) => ({
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          })),
+        },
+      })
+      .code(200);
+    return response;
+  }
+
+  // Jika terdapat query finished di dalam address
+  const filteredFinished = books.filter(
+    (book) => Number(book.finished) === Number(finished),
+  );
+
+  const response = h
+    .response({
+      status: 'success',
+      data: {
+        books: filteredFinished.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    })
+    .code(200);
+  return response;
+};
 
 // Handler untuk mendapatkan single book
 const getBookByIdHandler = (request, h) => {
