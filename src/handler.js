@@ -93,7 +93,6 @@ const addBookHandler = (request, h) => {
 
 // Handler untuk mendapatkan books
 const getAllBooksHandler = (request, h) => {
-  console.log(request.query);
   const { name, reading, finished } = request.query;
 
   // Jika tidak terdapat query di dalam address
