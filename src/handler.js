@@ -17,6 +17,29 @@ const addBookHandler = (request, h) => {
     reading,
   } = request.payload;
 
+  // RESPONSE : User tidak menambahkan nama buku
+  if (name === undefined) {
+    const response = h
+      .response({
+        status: 'fail',
+        message: 'Gagal menambahkan buku. Mohon isi nama buku',
+      })
+      .code(400);
+    return response;
+  }
+
+  // RESPONSE : User memasukkan banyak readPage > pageCount
+  if (readPage > pageCount) {
+    const response = h
+      .response({
+        status: 'fail',
+        message:
+          'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
+      })
+      .code(400);
+    return response;
+  }
+
   // Menambahkan property dari newBook
   const id = nanoid(16);
   const finished = false;
@@ -41,29 +64,6 @@ const addBookHandler = (request, h) => {
 
   // newBook dipush ke array books di dalam books.js
   books.push(newBook);
-
-  // RESPONSE : User tidak menambahkan nama buku
-  if (name === undefined) {
-    const response = h
-      .response({
-        status: 'fail',
-        message: 'Gagal menambahkan buku. Mohon isi nama buku',
-      })
-      .code(400);
-    return response;
-  }
-
-  // RESPONSE : User memasukkan banyak readPage > pageCount
-  if (readPage > pageCount) {
-    const response = h
-      .response({
-        status: 'fail',
-        message:
-          'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
-      })
-      .code(400);
-    return response;
-  }
 
   // Mengecek apakah book berhasil disusun
   const isSuccess = books.filter((book) => book.id === id).length > 0;
