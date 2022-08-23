@@ -90,7 +90,7 @@ const addBookHandler = (request, h) => {
   return response;
 };
 
-// Handler untuk mendapatkan notes
+// Handler untuk mendapatkan books
 const getAllBooksHandler = () => ({
   status: 'success',
   data: {
@@ -102,8 +102,35 @@ const getAllBooksHandler = () => ({
   },
 });
 
+// Handler untuk mendapatkan single book
+const getBookByIdHandler = (request, h) => {
+  const { id } = request.params; // Mengambil id address
+
+  // Memanfaatkan id untuk memfilter book yang cocok idnya
+  const book = books.filter((n) => n.id === id)[0];
+
+  // Jika book tidak undefined maka return success response
+  if (book !== undefined) {
+    return {
+      status: 'success',
+      data: {
+        book,
+      },
+    };
+  }
+
+  // Jika book undefined maka lanjut ke sini return fail response
+  const response = h.response({
+    status: 'fail',
+    message: 'Buku tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
+
 // Melakukan export handler
 module.exports = {
   addBookHandler,
   getAllBooksHandler,
+  getBookByIdHandler,
 };
