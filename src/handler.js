@@ -42,7 +42,8 @@ const addBookHandler = (request, h) => {
 
   // Menambahkan property dari newBook
   const id = nanoid(16);
-  const finished = false;
+  // Buku selesai dibaca jika dan hanya jika readPage == pageCount
+  const finished = (readPage === pageCount);
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
 
@@ -142,7 +143,11 @@ const editBookByIdHandler = (request, h) => {
     readPage,
     reading,
   } = request.payload; // Meminta data terbaru yang dikirimkan client
-  const updatedAt = new Date().toISOString(); // Update tanggal otomatis saat ini
+
+  // Update tanggal otomatis saat ini
+  const updatedAt = new Date().toISOString();
+  // Buku selesai dibaca jika dan hanya jika readPage == pageCount
+  const finished = (readPage === pageCount);
 
   // Lakukan pencarian book berdasarkan id
   const index = books.findIndex((book) => book.id === id);
@@ -182,6 +187,7 @@ const editBookByIdHandler = (request, h) => {
       publisher,
       pageCount,
       readPage,
+      finished,
       reading,
       updatedAt,
     };
